@@ -5,7 +5,6 @@ const path = require('path');
 
 const authenticator = require("../middleware/authJWT");
 
-
 const {
   getAllPost,
   getPost,
@@ -28,8 +27,7 @@ const upload = multer({ storage: storage });
 /* group method */
 router
   .route("/")
-  .get(authenticator, getAllPost)
-  //.post(authenticator, createPost);
+  .get(authenticator, getAllPost)  
   .post(authenticator, upload.single('image'), createPost);
 
 router

@@ -10,6 +10,6 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true
   },
-  "include": ["src/**/*.ts", "src/db/migrate.api.ts", "src/db/migrate.roles.ts", "src/migrations/20230823120000-insert-role.js", "src/services/user.service.ts", "src/models/user.model.ts", "src/routes/user.routes.ts", "src/models/role.model.ts", "src/services/role.service.ts", "src/middleware/authJWT.js", "src/middleware/authKey.js"],
+  "include": ["src/**/*.ts", "src/db/migrate.api.ts", "src/db/migrate.roles.ts", "src/migrations/20230823120000-insert-role.js", "src/services/user.service.ts", "src/models/user.model.ts", "src/routes/user.routes.ts", "src/models/role.model.ts", "src/services/role.service.ts", "src/middleware/authJWT.ts", "src/middleware/authKey.ts"],
   "exclude": ["node_modules"]
 }

@@ -1,5 +1,6 @@
 import express from 'express';
 const router = express.Router();
+
 const authenticatorKey = require("../middleware/authKey");
 const authenticator = require("../middleware/authJWT");
 
