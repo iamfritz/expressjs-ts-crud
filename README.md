@@ -7,15 +7,23 @@ Post with Category
 API Key
 Login Authentication
 
+# env
+DATABASE_URL=mongodb://127.0.0.1:27017/blogapp
+PORT=3010
+JWT_SECRET=DOREMIFASO 
+UPLOAD_PATH=src/public/uploads/ 
+
 # Installation
 ```bash
 npm install
 npm build
 npm start
+
+npm run migrateApiRoles
 ```
 
 ### TODO
 
 * [ ] Add Search Input
-* [ ] Add Authentication
+* [ ] Add typeorm
 * [ ] 
