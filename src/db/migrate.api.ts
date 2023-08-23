@@ -3,7 +3,7 @@ const ApikeyService = require("../services/apikey.service");
 async function runMigration() {
   try {
 
-    let api_key = await ApikeyService.getMany({ api_key: "abc123" });
+    let api_key = await ApikeyService.getAll({ api_key: "abc123" });
     if (api_key) {
         console.log("Sample API Key is already migrated.");
         console.log(api_key);

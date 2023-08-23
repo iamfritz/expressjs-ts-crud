@@ -9,7 +9,7 @@ const getAllCategory = async (req: Request, res: Response) => {
   };
 
   try {
-    const items = await CategoryService.getMany();
+    const items = await CategoryService.getAll();
 
     if (items.length === 0) {    
       result["status"] = "error";

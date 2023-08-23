@@ -12,23 +12,6 @@ class BaseService {
     }
   }
 
-  async get(id: string) {
-    try {
-      const model = await this.Model.findById(id);
-      return model;
-    } catch (error) {
-      throw error;
-    }
-  }
-  async findOne(field: Array<any>) {
-    try {
-      const model = await this.Model.findOne(field);
-      return model;
-    } catch (error) {
-      throw error;
-    }
-  }
-
   async update(id: string, data: Array<any>, options: Array<any>) {
     try {
       const model = await this.Model.findByIdAndUpdate(id, data, options);
@@ -47,6 +30,33 @@ class BaseService {
     }
   }
 
+  async getAll(filter: Array<any>) {
+    try {
+      const models = await this.Model.find(filter);
+      return models;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async get(id: string) {
+    try {
+      const model = await this.Model.findById(id);
+      return model;
+    } catch (error) {
+      throw error;
+    }
+  }  
+
+  async getByField(field: Array<any>) {
+    try {
+      const model = await this.Model.findOne(field);
+      return model;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async getWithPopulation(id: string, field: Array<any>) {
     try {
       const model = await this.Model.findById(id).populate(field);
@@ -56,16 +66,7 @@ class BaseService {
     }
   }
 
-  async getMany(filter: Array<any>) {
-    try {
-      const models = await this.Model.find(filter);
-      return models;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async getManyWithPopulation(filter: Array<any>, field: string) {
+  async getAllWithPopulation(filter: Array<any>, field: string) {
     try {
       const models = await this.Model.find(filter).populate(field);
       return models;

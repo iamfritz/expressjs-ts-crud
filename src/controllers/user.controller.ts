@@ -29,7 +29,7 @@ const getAllUser = async (req: Request, res: Response) => {
 
   try {
     
-    const userItems = await UserService.getManyWithPopulation({}, "roles");
+    const userItems = await UserService.getAllWithPopulation({}, "roles");
     const items = userItems.sort(
       (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
     );
@@ -126,7 +126,7 @@ const createUser = async (req: Request, res: Response) => {
 
   try {
     // Find roles by name
-    const foundRoles = await RoleService.getMany({ name: { $in: roles } });
+    const foundRoles = await RoleService.getAll({ name: { $in: roles } });
 
     // Create the user and associate roles
     const data = {
@@ -172,7 +172,7 @@ const updateUser = async (req: Request, res: Response) => {
 
   try {
     // Find roles by name
-    const foundRoles = await RoleService.getMany({ name: { $in: roles } });
+    const foundRoles = await RoleService.getAll({ name: { $in: roles } });
 
     let dataUpdate = {
       email,
@@ -244,7 +244,7 @@ const registerUser = async (req: Request, res: Response) => {
 
   try {
     // Find roles by name
-    const foundRoles = await RoleService.getMany({ name: { $in: ["user"] } });
+    const foundRoles = await RoleService.getAll({ name: { $in: ["user"] } });
 
     // Create the user and associate roles
     const data = {
@@ -289,7 +289,7 @@ const loginUser = async (request, response) => {
     response.status(401).json(result);
   }
   // check if email exists
-  UserService.findOne({ email: request.body.email })
+  UserService.getByField({ email: request.body.email })
 
     // if email exists
     .then((user) => {
