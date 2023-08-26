@@ -8,7 +8,7 @@ const authenticate = async (req: Request, res: Response, next: NextFunction) => 
     res.status(401).json({ status: "error", message: "Unauthorized" });
   }
   try {
-    let account = await ApikeyService.findOne({ api_key: userKey });
+    let account = await ApikeyService.getByField({ api_key: userKey });
 
     if (account) {
       next();

@@ -9,6 +9,12 @@ export interface IPost extends Document {
   updatedAt: Date;    
 }
 
+const metaSchema = new mongoose.Schema({
+    name: String,
+    value: String,
+});
+
+
 const postSchema: Schema = new Schema(
   {
     title: {
@@ -24,6 +30,7 @@ const postSchema: Schema = new Schema(
       type: String,
     },
     category: [{ type: mongoose.Schema.Types.ObjectId, ref: "Category" }],
+    meta: [metaSchema],    
     createdAt: { type: Date },
     updatedAt: { type: Date }
   }

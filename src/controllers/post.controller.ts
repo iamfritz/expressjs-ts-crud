@@ -9,7 +9,7 @@ const getAllPost = async (req: Request, res: Response) => {
   };
 
   try {  
-    const postItems = await PostService.getManyWithPopulation({}, "category");
+    const postItems = await PostService.getAllWithPopulation({}, "category");
     const items = postItems.sort(
       (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
     );
@@ -94,7 +94,7 @@ const createPost = async (req: Request, res: Response) => {
     data: {},
   };
   try {
-    const { title, description, category } = req.body;
+    const { title, description, category, meta } = req.body;
     const categories = category ? category.split(",").map((cat) => cat.trim()) : []; // Split comma-separated categories
     const imageUrl = req.file ? req.file.path : '';
     //console.log(imageUrl);
@@ -103,6 +103,7 @@ const createPost = async (req: Request, res: Response) => {
       title: title,
       description: description,
       category: categories,
+      meta: meta,
       image: imageUrl
     };
 
