@@ -276,26 +276,26 @@ const registerUser = async (req: Request, res: Response) => {
 };
 
 // login endpoint
-const loginUser = async (request, response) => {
+const loginUser = async (req: Request, res: Response) => {
   let result = {
     status: "error",
     message: "",
     data: {},
   };  
     
-  if (!request.body.email || !request.body.password) {
+  if (!req.body.email || !req.body.password) {
     result["message"] = "Email Address and Password is required.";
 
     response.status(401).json(result);
   }
   // check if email exists
-  UserService.getByField({ email: request.body.email })
+  UserService.getByField({ email: req.body.email })
 
     // if email exists
     .then((user) => {
       // compare the password entered and the hashed password found
       bcrypt
-        .compare(request.body.password, user.password)
+        .compare(req.body.password, user.password)
 
         // if the passwords match
         .then((passwordCheck) => {
@@ -303,7 +303,7 @@ const loginUser = async (request, response) => {
           if (!passwordCheck) {
             result["message"] = "Passwords does not match";
 
-            response.status(401).json(result);
+            res.status(401).json(result);
           }
 
           const JWT_SECRET = process.env.JWT_SECRET || "SECRET-TOKEN";
@@ -318,7 +318,7 @@ const loginUser = async (request, response) => {
           );
 
           //   return success response
-          response.status(200).send({
+          res.status(200).send({
             status: "success",
             message: "Login Successful",
             data: {
@@ -331,15 +331,28 @@ const loginUser = async (request, response) => {
         .catch((error) => {
           result["message"] = "Passwords does not match";
 
-          response.status(401).json(result);
+          res.status(401).json(result);
         });
     })
     // catch error if email does not exist
     .catch((e) => {
       result["message"] = "Email Address not found.";
 
-      response.status(401).json(result);
+      res.status(401).json(result);
     });
+};
+
+const logoutUser = async (req: Request, res: Response) => {
+  let result = {
+    status: "error",
+    message: "",
+    data: {},
+  };  
+    
+  result["status"]  = "success";
+  result["message"] = "Logged out successfully";
+
+  res.json(result);
 };
 
 const userInfo = async (req: Request, res: Response) => {
@@ -383,5 +396,6 @@ module.exports = {
   deleteUser,
   registerUser,
   loginUser,
+  logoutUser,
   userInfo,
 };

@@ -51,7 +51,7 @@ const getAllPost = async (req: Request, res: Response) => {
 
       res.json(result);
     } 
-  } catch (error) {
+  } catch (error: any) {
     result["status"] = "error";
     result["message"] = error.message;
 
@@ -78,7 +78,7 @@ const getPost = async (req: Request, res: Response) => {
 
       res.status(401).json(result);
     }
-  } catch (error) {
+  } catch (error: any) {
     result["status"] = "error";
     result["message"] = error.message;
 
@@ -118,7 +118,7 @@ const createPost = async (req: Request, res: Response) => {
       result["message"] = `Unable to add a new record.`;
       res.status(401).json(result);
     }
-  } catch (error) {
+  } catch (error: any) {
     result["status"] = "error";
     result["message"] = error.message;
 
@@ -151,7 +151,7 @@ const updatePost = async (req: Request, res: Response) => {
       result["message"] = `Unable to update a record.`;
       res.status(401).json(result);
     }
-  } catch (error) {
+  } catch (error: any) {
     result["status"] = "error";
     result["message"] = error.message;
 
@@ -177,7 +177,7 @@ const deletePost = async (req: Request, res: Response) => {
       result["message"] = `Unable to delete a record.`;
       res.status(401).json(result);
     }
-  } catch (error) {
+  } catch (error: any) {
     result["status"] = "error";
     result["message"] = error.message;
 

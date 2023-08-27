@@ -1,16 +1,24 @@
+import express, { Request, Response, NextFunction } from 'express';
 const jwt = require("jsonwebtoken");
+const blacklist: string[] = [];
 
-module.exports = async (request, response, next) => {
+/* module.exports = async (req: Request, res: Response, next: NextFunction) => {}; */
+
+const authenticator = async (req: Request, res: Response, next: NextFunction) => {
   try {
     //   get the token from the authorization header
-    const token = await request.headers.authorization.split(" ")[1];
+    const token = await req.headers.authorization.split(" ")[1];
     //const token2 = request.body.token || request.query.token || request.headers["x-access-token"];
 
     // Check if no token
     if (!token) {
-      response
+      res
         .status(401)
         .json({ status: "error", message: "No token, authorization denied" });
+    } else if (blacklist.includes(token)) {
+        res
+        .status(401)
+        .json({ status: "error", message: "Token revoked" });
     }
 
     // Verify token
@@ -18,27 +26,57 @@ module.exports = async (request, response, next) => {
     try {
       jwt.verify(token, JWT_SECRET, (error, decoded) => {
         if (error) {
-          response.status(401).json({
+          res.status(401).json({
             status: "error",
             message: "Token is not valid",
           });
         } else {
           //console.log(decoded);
-          request.user = decoded;
+          req.user = decoded;
           next();
         }
       });
-    } catch (err) {
+    } catch (err: any) {
       console.error("Invalid Token: " + token);
       console.error(err);
-      response.status(500).json({ status: "error", message: "Invalid Token" });
+      res.status(500).json({ status: "error", message: "Invalid Token" });
     }
-  } catch (error) {
-    response
+  } catch (error: any) {
+    res
       .status(500)
       .json({ status: "error", message: "Unauthorized Request" });
   }
 };
 
+const blacklistToken = async (req: Request, res: Response, next: NextFunction) => {
+  
+  try {
+    const token = await req.headers.authorization.split(" ")[1];    
+    if (!token) {
+      res
+        .status(401)
+        .json({ status: "error", message: "No token, authorization denied" });
+    }
+
+    if (blacklist.includes(token)) {        
+        res
+        .status(401)
+        .json({ status: "error", message: "Token already revoked" });
+    } else {
+      blacklist.push(token);   
+      next();
+    }
+
+  } catch (error: any) {
+    res
+      .status(500)
+      .json({ status: "error", message: "Unauthorized Request" });
+  }  
+};
+
+module.exports = {
+  authenticator,
+  blacklistToken
+};
 
 //https://www.loginradius.com/blog/engineering/guest-post/nodejs-authentication-guide/

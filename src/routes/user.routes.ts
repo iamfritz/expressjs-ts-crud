@@ -2,7 +2,11 @@ import express from 'express';
 const router = express.Router();
 
 const authenticatorKey = require("../middleware/authKey");
-const authenticator = require("../middleware/authJWT");
+//const authenticator = require("../middleware/authJWT");
+const {
+  authenticator,
+  blacklistToken,
+} = require("../middleware/authJWT");
 
 const {
   getAllUser,
@@ -13,6 +17,7 @@ const {
   deleteUser,
   registerUser,
   loginUser,
+  logoutUser
 } = require("../controllers/user.controller");
 
 router
@@ -26,6 +31,7 @@ router.get("/info", authenticator, userInfo);
 //register and login
 router.post("/register", authenticatorKey, registerUser);
 router.post("/login", authenticatorKey, loginUser);
+router.get("/logout", blacklistToken, logoutUser);
 
 router
   .route("/:id")

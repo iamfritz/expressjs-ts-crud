@@ -1,7 +1,7 @@
 import express from 'express';
 const router = express.Router();
 
-const authenticator = require("../middleware/authJWT");
+const { authenticator } = require("../middleware/authJWT");
 
 const {
   getAllCategory,

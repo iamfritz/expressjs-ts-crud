@@ -3,7 +3,7 @@ const router = express.Router();
 const multer = require('multer');
 const path = require('path');
 
-const authenticator = require("../middleware/authJWT");
+const { authenticator } = require("../middleware/authJWT");
 
 const {
   getAllPost,
