@@ -4,11 +4,11 @@ const blacklist: string[] = [];
 
 /* module.exports = async (req: Request, res: Response, next: NextFunction) => {}; */
 
-const authenticator = async (req: Request, res: Response, next: NextFunction) => {
+const authenticator = async (req: Request, res: Response, next: Function) => {
   try {
     //   get the token from the authorization header
-    const token = await req.headers.authorization.split(" ")[1];
-    //const token2 = request.body.token || request.query.token || request.headers["x-access-token"];
+    //const token = await req.headers.authorization.split(" ")[1];
+    let token = extractToken(req);
 
     // Check if no token
     if (!token) {
@@ -51,7 +51,8 @@ const authenticator = async (req: Request, res: Response, next: NextFunction) =>
 const blacklistToken = async (req: Request, res: Response, next: NextFunction) => {
   
   try {
-    const token = await req.headers.authorization.split(" ")[1];    
+    //const token = await req.headers.authorization.split(" ")[1];
+    let token = extractToken(req); 
     if (!token) {
       res
         .status(401)
@@ -73,6 +74,15 @@ const blacklistToken = async (req: Request, res: Response, next: NextFunction) =
       .json({ status: "error", message: "Unauthorized Request" });
   }  
 };
+
+function extractToken(req: Request) {
+    if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
+        return req.headers.authorization.split(' ')[1];
+    } else if (req.query && req.query.token) {
+        return req.query.token
+    }
+    return null;
+}
 
 module.exports = {
   authenticator,

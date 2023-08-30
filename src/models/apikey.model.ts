@@ -9,7 +9,7 @@ export interface IApikey extends Document {
 }
 
 const apikeySchema: Schema = new Schema({
-    api_key: {
+    apikey: {
       required: true,
       type: String,
     },

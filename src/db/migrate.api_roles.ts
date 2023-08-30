@@ -8,20 +8,20 @@ const ApikeyService = require("../services/apikey.service");
 
 async function insertAPI() {
   try {
-    let api_key = await ApikeyService.getAll({ api_key: "abc123" });
-    if (api_key) {
-        console.log("Sample API Key is already migrated.");
-        console.log(api_key);
+    let apikey = await ApikeyService.getAll({ apikey: "abc123" });
+    if (apikey.length === 0)) {
+        console.log("Sample API Key successfully migrated.");
+        console.log(apikey);
     } else {
         
         const data = {
-                      api_key: "abc123",
+                      apikey: "abc123",
                       username: "fritz"  
                     };
 
         const newApi = await ApikeyService.create(data);
         if (newApi) {
-            console.log("New entry migrated successfully.");
+            console.log("New API migrated successfully.");
             console.log(newApi);
         } else {
           console.error("Migration Failed.");

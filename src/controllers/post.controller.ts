@@ -1,5 +1,4 @@
 const PostService = require("../services/post.service");
-const mongoose = require("mongoose");
 
 const getAllPost = async (req: Request, res: Response) => {
   let result = {

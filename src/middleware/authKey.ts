@@ -1,14 +1,14 @@
 const ApikeyService = require("../services/apikey.service");
 
-const authenticate = async (req: Request, res: Response, next: NextFunction) => {
+const authenticate = async (req: any, res: Response, next: Function) => {
   
-  let userKey = req.header("api-key");
-  
-  if (!userKey) {
+  const apiKey = req.headers['api-key'];
+
+  if (!apiKey) {
     res.status(401).json({ status: "error", message: "Unauthorized" });
   }
   try {
-    let account = await ApikeyService.getByField({ api_key: userKey });
+    let account = await ApikeyService.getByField({ apikey: apiKey });
 
     if (account) {
       next();
@@ -21,4 +21,5 @@ const authenticate = async (req: Request, res: Response, next: NextFunction) => 
     console.error(error.message);
   }
 };
+
 module.exports = authenticate;

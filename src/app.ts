@@ -27,11 +27,15 @@ app.use(function (req: Request, res: Response, next: NextFunction) {
 app.use(express.json());
 
 // Routes
+app.get('/api/hello', (req, res) => {
+  res.json({ message: 'Hello, World!' });
+});
+
 app.use('/api/categories', categoryRoutes);
 app.use('/api/posts', postRoutes);
 app.use('/api/users', userRoutes);
 
 // Start the server
 app.listen(PORT, () => {
-  console.log(`Server is running on PORT ${PORT}`);
+  console.log(`Server is Running on ${PORT} ⚡`);
 });
