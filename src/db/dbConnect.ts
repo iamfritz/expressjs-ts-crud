@@ -16,7 +16,7 @@ async function dbConnect() {
     })
     .catch((error: any) => {
       console.log("Unable to connect to MongoDB!");
-      console.error(error);
+      console.log(error);
     });
 }
 

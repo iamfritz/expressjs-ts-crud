@@ -8,7 +8,8 @@
     "start": "node dist/app.js",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/app.js\"",
     "migrateApiRoles": "node ./dist/db/migrate.api_roles.js",
-    "test": "jest --watchAll --verbose --coverage --maxWorkers=1"
+    "test1": "jest --watchAll --verbose --coverage --maxWorkers=1",
+    "test": "jest cross-env NODE_ENV=test process.env.PORT=9090 --testTimeout=5000"
   },
   "keywords": [],
   "author": "",

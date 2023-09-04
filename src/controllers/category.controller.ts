@@ -1,5 +1,5 @@
 import type {Request, Response} from 'express';
-import CategoryService from '../services/category.service';
+const CategoryService = require("../services/category.service");
 
 const getAllCategory = async (req: Request, res: Response) => {
   let result = {

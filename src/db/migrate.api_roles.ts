@@ -9,7 +9,7 @@ const ApikeyService = require("../services/apikey.service");
 async function insertAPI() {
   try {
     let apikey = await ApikeyService.getAll({ apikey: "abc123" });
-    if (apikey.length === 0)) {
+    if (apikey.length === 0) {
         console.log("Sample API Key successfully migrated.");
         console.log(apikey);
     } else {
