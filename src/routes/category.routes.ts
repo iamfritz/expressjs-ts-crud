@@ -14,12 +14,12 @@ const {
 /* group method */
 router
   .route("/")
-  .get(authenticator, getAllCategory)
+  .get(getAllCategory)
   .post(authenticator, createCategory);
 
 router
   .route("/:id")
-  .get(authenticator, getCategory)
+  .get(getCategory)
   .delete(authenticator, deleteCategory)
   .put(authenticator, updateCategory);
 

@@ -27,14 +27,14 @@ const upload = multer({ storage: storage });
 /* group method */
 router
   .route("/")
-  .get(authenticator, getAllPost)  
+  .get(getAllPost)  
   .post(authenticator, upload.single('image'), createPost);
 
 router
   .route("/:id")
-  .get(authenticator, getPost)
+  .get(getPost)
   .delete(authenticator, deletePost)
-  .put(authenticator, updatePost);
+  .put(authenticator, upload.single('image'), updatePost);
 
 export default router;
 

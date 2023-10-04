@@ -1,4 +1,5 @@
 const PostService = require("../services/post.service");
+const CategoryService = require("../services/category.service");
 const mongoose = require("mongoose");
 
 const getAllPost = async (req: Request, res: Response) => {
@@ -37,19 +38,21 @@ const getAllPost = async (req: Request, res: Response) => {
         res
           .status(400)
           .json({ status: "error", message: "Page number out of range" });
+      } else {
+
+        let postItems = items.slice(startIndex, endIndex);
+        result["status"] = "success";
+        result["paging"] = {
+          total: items.length,
+          pages: totalPages,
+          page: page,
+          limit: limit,
+        };
+        result["data"] = postItems;
+  
+        res.json(result);
       }
 
-      let postItems = items.slice(startIndex, endIndex);
-      result["status"] = "success";
-      result["paging"] = {
-        total: items.length,
-        pages: totalPages,
-        page: page,
-        limit: limit,
-      };
-      result["data"] = postItems;
-
-      res.json(result);
     } 
   } catch (error: any) {
     result["status"] = "error";
@@ -95,14 +98,14 @@ const createPost = async (req: Request, res: Response) => {
   };
   try {
     const { title, description, category, meta } = req.body;
-    const categories = category ? category.split(",").map((cat) => cat.trim()) : []; // Split comma-separated categories
+    
+    const postCategory = await CategoryService.findOrCreate(category);
     const imageUrl = req.file ? req.file.path : '';
-    //console.log(imageUrl);
 
     const data = {
       title: title,
       description: description,
-      category: categories,
+      category: postCategory,
       meta: meta,
       image: imageUrl
     };
@@ -136,6 +139,14 @@ const updatePost = async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
     const updatedData = req.body;
+
+    if (updatedData['category']) {
+      const postCategory = await CategoryService.findOrCreate(updatedData['category']);
+      updatedData['category'] = postCategory;
+    }
+    if(req.file) {
+      updatedData['image'] = req.file.path;
+    }
 
     const options = { new: true };
 

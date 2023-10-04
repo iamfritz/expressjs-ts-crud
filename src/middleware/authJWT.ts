@@ -3,50 +3,48 @@ const jwt = require("jsonwebtoken");
 const blacklist: string[] = [];
 
 /* module.exports = async (req: Request, res: Response, next: NextFunction) => {}; */
-
 const authenticator = async (req: Request, res: Response, next: NextFunction) => {
-  try {
     //   get the token from the authorization header
-    const token = await req.headers.authorization.split(" ")[1];
-    //const token2 = request.body.token || request.query.token || request.headers["x-access-token"];
-
+    let token = extractToken(req);
+    console.log(token);
+    
     // Check if no token
     if (!token) {
       res
         .status(401)
         .json({ status: "error", message: "No token, authorization denied" });
-    } else if (blacklist.includes(token)) {
+
+    /* } else if (blacklist.includes(token)) {
         res
         .status(401)
-        .json({ status: "error", message: "Token revoked" });
-    }
-
+        .json({ status: "error", message: "Token revoked" }); */
+    } else {
     // Verify token
     const JWT_SECRET = process.env.JWT_SECRET || "SECRET-TOKEN";
-    try {
-      jwt.verify(token, JWT_SECRET, (error, decoded) => {
-        if (error) {
-          res.status(401).json({
-            status: "error",
-            message: "Token is not valid",
-          });
-        } else {
-          //console.log(decoded);
-          req.user = decoded;
-          next();
-        }
-      });
-    } catch (err: any) {
-      console.error("Invalid Token: " + token);
-      console.error(err);
-      res.status(500).json({ status: "error", message: "Invalid Token" });
-    }
-  } catch (error: any) {
-    res
-      .status(500)
-      .json({ status: "error", message: "Unauthorized Request" });
+    jwt.verify(token, JWT_SECRET, (error, decoded) => {
+      if (error) {
+        res.status(401).json({
+          status: "error",
+          message: "Token is not valid",
+        });
+      } else {
+        //console.log(decoded);
+        req.user = decoded;
+        next();
+      }
+    });
   }
+
 };
+
+function extractToken(req: Request) {
+    if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
+        return req.headers.authorization.split(' ')[1];
+    } else if (req.query && req.query.token) {
+        return req.query.token
+    }
+    return null;
+}
 
 const blacklistToken = async (req: Request, res: Response, next: NextFunction) => {
   
