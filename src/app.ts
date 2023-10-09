@@ -25,6 +25,7 @@ app.use(function (req: Request, res: Response, next: NextFunction) {
 
 // Middleware
 app.use(express.json());
+app.use('/uploads', express.static('uploads'));
 
 // Routes
 app.use('/api/categories', categoryRoutes);

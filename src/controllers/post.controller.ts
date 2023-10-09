@@ -3,12 +3,13 @@ const CategoryService = require("../services/category.service");
 const mongoose = require("mongoose");
 
 const getAllPost = async (req: Request, res: Response) => {
+  const uploadURL = `${req.protocol}://${req.get('host')}/uploads`;
   let result = {
     status: "error",
     message: "",
     data: {},
   };
-
+  
   try {  
     const postItems = await PostService.getAllWithPopulation({}, "category");
     const items = postItems.sort(
@@ -39,8 +40,13 @@ const getAllPost = async (req: Request, res: Response) => {
           .status(400)
           .json({ status: "error", message: "Page number out of range" });
       } else {
-
+        
         let postItems = items.slice(startIndex, endIndex);
+        const postsWithFullUrls = postItems.map((post) => ({
+          ...post.toJSON(),
+          imageFullUrl: `${uploadURL}/${post.image}`, // Replace with your image URL base path
+        }));
+
         result["status"] = "success";
         result["paging"] = {
           total: items.length,
@@ -48,7 +54,8 @@ const getAllPost = async (req: Request, res: Response) => {
           page: page,
           limit: limit,
         };
-        result["data"] = postItems;
+        //result["baseUrl"]  = uploadURL;
+        result["data"]      = postsWithFullUrls;
   
         res.json(result);
       }
@@ -64,6 +71,7 @@ const getAllPost = async (req: Request, res: Response) => {
 
 //get post
 const getPost = async (req: Request, res: Response) => {
+  const uploadURL = `${req.protocol}://${req.get('host')}/uploads`;
   let result = {
     status: "error",
     message: "",
@@ -72,6 +80,7 @@ const getPost = async (req: Request, res: Response) => {
   try {
     const data = await PostService.getWithPopulation(req.params.id, "category");
     if (data) {
+      data.image = data.image ? `${uploadURL}/${data.image}` : '';
       result["status"] = "success";
       result["data"] = data;
       res.json(result);
@@ -91,6 +100,7 @@ const getPost = async (req: Request, res: Response) => {
 
 //create a new post
 const createPost = async (req: Request, res: Response) => {
+  const uploadURL = `${req.protocol}://${req.get('host')}/uploads`;
   let result = {
     status: "error",
     message: "",
@@ -100,19 +110,22 @@ const createPost = async (req: Request, res: Response) => {
     const { title, description, category, meta } = req.body;
     
     const postCategory = await CategoryService.findOrCreate(category);
-    const imageUrl = req.file ? req.file.path : '';
+    console.log(req.file);
+    const image   = req.file ? req.file.filename : '';
+    const imageUrl = image ? `${uploadURL}/${image}` : '';
 
     const data = {
       title: title,
       description: description,
       category: postCategory,
       meta: meta,
-      image: imageUrl
+      image: image
     };
 
     const newPost = await PostService.create(data);
     if (newPost) {
       result["status"] = "success";
+      newPost.image = imageUrl;
       result["data"] = newPost;
 
       res.json(result);

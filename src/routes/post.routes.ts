@@ -4,6 +4,7 @@ const multer = require('multer');
 const path = require('path');
 
 const { authenticator } = require("../middleware/authJWT");
+const { upload } = require("../middleware/fileUpload");
 
 const {
   getAllPost,
@@ -12,17 +13,6 @@ const {
   updatePost,
   deletePost,
 } = require("../controllers/post.controller");
-
-// Set up multer for image uploads
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, process.env.UPLOAD_PATH);
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname));
-  },
-});
-const upload = multer({ storage: storage });
 
 /* group method */
 router
